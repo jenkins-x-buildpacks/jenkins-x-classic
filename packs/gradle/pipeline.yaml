@@ -1,0 +1,21 @@
+extends:
+  file: ../pipeline.yaml
+agent:
+  label: jenkins-gradle
+  container: gradle
+pipelines:
+  pullRequest:
+    build:
+      steps:
+      - sh: gradle clean build
+  release:
+    setVersion:
+      steps:
+      - sh: echo \$(jx-release-version) > VERSION
+        comment: so we can retrieve the version in later steps
+      # TODO
+      # - sh: mvn versions:set -DnewVersion=\$(cat VERSION)
+      - sh: jx step tag --version \$(cat VERSION)
+    build:
+      steps:
+      - sh: gradle clean build

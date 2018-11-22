@@ -1,0 +1,22 @@
+extends:
+  file: ../pipeline.yaml
+agent:
+  label: jenkins-maven
+  container: maven
+pipelines:
+  pullRequest:
+    build:
+      steps:
+      - sh: npm install
+      - sh: CI=true DISPLAY=:99 npm test
+  release:
+    setVersion:
+      steps:
+      - sh: echo \$(jx-release-version) > VERSION
+        comment: so we can retrieve the version in later steps
+      # TODO modify package.json?
+      - sh: jx step tag --version \$(cat VERSION)
+    build:
+      steps:
+      - sh: npm install
+      - sh: CI=true DISPLAY=:99 npm test

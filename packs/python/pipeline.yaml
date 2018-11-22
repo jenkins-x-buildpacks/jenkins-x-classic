@@ -1,0 +1,20 @@
+extends:
+  file: ../pipeline.yaml
+agent:
+  label: jenkins-python
+  container: python
+pipelines:
+  pullRequest:
+    build:
+      steps:
+      - sh: python -m unittest
+  release:
+    setVersion:
+      steps:
+      - sh: echo \$(jx-release-version) > VERSION
+        comment: so we can retrieve the version in later steps
+      # TODO set the version in source?
+      - sh: jx step tag --version \$(cat VERSION)
+    build:
+      steps:
+      - sh: python -m unittest

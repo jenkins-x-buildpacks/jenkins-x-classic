@@ -1,0 +1,20 @@
+extends:
+  file: ../pipeline.yaml
+agent:
+  label: jenkins-scala
+  container: scala
+pipelines:
+  pullRequest:
+    build:
+      steps:
+      - sh: sbt clean compile assembly
+  release:
+    setVersion:
+      steps:
+      - sh: echo \$(jx-release-version) > VERSION
+        comment: so we can retrieve the version in later steps
+      - sh: mvn versions:set -DnewVersion=\$(cat VERSION)
+      - sh: jx step tag --version \$(cat VERSION)
+    build:
+      steps:
+      - sh: sbt clean compile assembly

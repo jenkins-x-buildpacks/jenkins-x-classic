@@ -1,0 +1,24 @@
+extends:
+  file: ../pipeline.yaml
+agent:
+  label: jenkins-rust
+  container: rust
+pipelines:
+  pullRequest:
+    build:
+      steps:
+      - sh: rustup override set nightly
+      - sh: cargo install
+      - sh: cp ~/.cargo/bin/REPLACE_ME_APP_NAME .
+  release:
+    setVersion:
+      steps:
+      - sh: echo \$(jx-release-version) > VERSION
+        comment: so we can retrieve the version in later steps
+      # TODO set the version in source?
+      - sh: jx step tag --version \$(cat VERSION)
+    build:
+      steps:
+      - sh: rustup override set nightly
+      - sh: cargo install
+      - sh: cp ~/.cargo/bin/REPLACE_ME_APP_NAME .

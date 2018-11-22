@@ -1,0 +1,20 @@
+extends:
+  file: ../pipeline.yaml
+agent:
+  label: jenkins-dlang
+  container: dlang
+pipelines:
+  pullRequest:
+    build:
+      steps:
+      - sh: dub build --build=release
+  release:
+    setVersion:
+      steps:
+      - sh: echo \$(jx-release-version) > VERSION
+        comment: so we can retrieve the version in later steps
+      - sh: jx step tag --version \$(cat VERSION)
+    build:
+      steps:
+      - sh: dub build --build=release
+
