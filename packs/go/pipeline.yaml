@@ -1,8 +1,8 @@
 extends:
   file: ../pipeline.yaml
 agent:
-  label: jenkins-maven
-  container: maven
+  label: jenkins-go
+  container: go
 pipelines:
   pullRequest:
     build:
