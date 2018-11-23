@@ -13,7 +13,7 @@ pipelines:
       steps:
       - sh: echo \$(jx-release-version) > VERSION
         comment: so we can retrieve the version in later steps
-      - sh: mvn versions:set -DnewVersion=\$(cat VERSION)
+      # TODO set version with sbt?
       - sh: jx step tag --version \$(cat VERSION)
     build:
       steps:
