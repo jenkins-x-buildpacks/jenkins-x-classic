@@ -19,10 +19,9 @@ pipelines:
         when: "!prow"
     setVersion:
       steps:
-        steps:
-        - sh: echo \$(jx-release-version) > VERSION
-          comment: so we can retrieve the version in later steps
-        - sh: jx step tag --version \$(cat VERSION)
+      - sh: echo \$(jx-release-version) > VERSION
+        comment: so we can retrieve the version in later steps
+      - sh: jx step tag --version \$(cat VERSION)
     build:
       steps:
       - sh: make build
