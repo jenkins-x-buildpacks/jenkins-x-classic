@@ -1,22 +1,28 @@
-extends:
-  file: ../pipeline.yaml
 agent:
   label: jenkins-go
   container: go
+  dir: /home/jenkins/go/src/REPLACE_ME_GIT_PROVIDER/REPLACE_ME_ORG/REPLACE_ME_APP_NAME
 pipelines:
   pullRequest:
     build:
-      dir: /home/jenkins/go/src/REPLACE_ME_GIT_PROVIDER/REPLACE_ME_ORG/REPLACE_ME_APP_NAME
       steps:
       - sh: make linux
   release:
-    setVersion:
-      dir: /home/jenkins/go/src/REPLACE_ME_GIT_PROVIDER/REPLACE_ME_ORG/REPLACE_ME_APP_NAME
+    setup:
       steps:
-      - sh: echo \$(jx-release-version) > VERSION
-        comment: so we can retrieve the version in later steps
-      - sh: jx step tag --version \$(cat VERSION)
+      - sh: checkout scm
+      - sh: git checkout master
+        comment: ensure we're not on a detached head
+      - sh: git config --global credential.helper store
+        when: "!prow"
+      - sh: jx step git credentials
+        when: "!prow"
+    setVersion:
+      steps:
+        steps:
+        - sh: echo \$(jx-release-version) > VERSION
+          comment: so we can retrieve the version in later steps
+        - sh: jx step tag --version \$(cat VERSION)
     build:
-      dir: /home/jenkins/go/src/REPLACE_ME_GIT_PROVIDER/REPLACE_ME_ORG/REPLACE_ME_APP_NAME
       steps:
       - sh: make build
