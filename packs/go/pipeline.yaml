@@ -10,7 +10,7 @@ pipelines:
   release:
     setup:
       steps:
-      - sh: checkout scm
+      - groovy: checkout scm
       - sh: git checkout master
         comment: ensure we're not on a detached head
       - sh: git config --global credential.helper store
