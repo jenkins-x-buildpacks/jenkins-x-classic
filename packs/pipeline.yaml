@@ -8,3 +8,9 @@ pipelines:
         when: "!prow"
       - sh: jx step git credentials
         when: "!prow"
+  post:
+    steps:
+    - groovy: always
+      when: "!prow"
+      steps:
+        - groovy: "cleanWs()"
