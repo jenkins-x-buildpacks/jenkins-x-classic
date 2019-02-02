@@ -15,7 +15,7 @@ pipelines:
       - sh: echo \$(jx-release-version) > VERSION
         comment: so we can retrieve the version in later steps
       # TODO modify package.json?
-      - sh: jx step tag --version \$(cat VERSION)
+      - sh: jx step tag --verbose --version \$(cat VERSION)
     build:
       steps:
       - sh: npm install
