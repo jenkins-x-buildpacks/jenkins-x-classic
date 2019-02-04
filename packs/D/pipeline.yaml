@@ -8,13 +8,17 @@ pipelines:
     build:
       steps:
       - sh: dub build --build=release
+        name: dub-build
   release:
     setVersion:
       steps:
       - sh: echo \$(jx-release-version) > VERSION
+        name: next-version
         comment: so we can retrieve the version in later steps
       - sh: jx step tag --version \$(cat VERSION)
+        name: tag-version
     build:
       steps:
       - sh: dub build --build=release
+        name: dub-build
 
