@@ -1,0 +1,27 @@
+extends:
+  file: ../pipeline.yaml
+agent:
+  label: jenkins-cpp
+  container: cpp
+pipelines:
+  pullRequest:
+    build:
+      steps:
+      - sh: cmake3 CMakeLists.txt
+        name: cmake
+      - sh: make
+        name: make
+  release:
+    setVersion:
+      steps:
+      - sh: echo \$(jx-release-version) > VERSION
+        name: next-version
+        comment: so we can retrieve the version in later steps
+      - sh: jx step tag --version \$(cat VERSION)
+        name: tag-version
+    build:
+      steps:
+      - sh: cmake3 CMakeLists.txt
+        name: cmake
+      - sh: make
+        name: make
