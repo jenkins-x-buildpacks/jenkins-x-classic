@@ -16,6 +16,7 @@ pipelines:
       - sh: echo \$(jx-release-version) > VERSION
         name: next-version
         comment: so we can retrieve the version in later steps
+      # TODO modify package.json?
       - sh: jx step tag --version \$(cat VERSION)
         name: tag-version
     build:
@@ -23,8 +24,6 @@ pipelines:
       - sh: jx step credential -s npm-token -k file -f /builder/home/.npmrc --optional=true
         name: npmrc
         image: jenkinsxio/jx:2.0.119
-      - command: npm version \$(cat VERSION)
-        name: npm-version
       - sh: npm install
         name: npm-install
       - sh: CI=true DISPLAY=:99 npm test
