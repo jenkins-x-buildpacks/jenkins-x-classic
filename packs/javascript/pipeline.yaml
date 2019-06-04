@@ -13,6 +13,7 @@ pipelines:
       - sh: npm install
         name: npm-install
       - sh: CI=true DISPLAY=:99 npm test
+        name: npm-test
   release:
     setVersion:
       steps:
