@@ -8,9 +8,9 @@ pipelines:
     build:
       steps:    
       - sh: python -m unittest
-        name: python-unittest
-        image: gcr.io/jenkinsxio/builder-nodejs
-  release:
+        name: python-unittest        
+  release:    
+    image: sharepointoscar/node:8
     setVersion:
       steps:
       - sh: echo \$(jx-release-version) > VERSION
@@ -20,11 +20,7 @@ pipelines:
       - sh: jx step tag --version \$(cat VERSION)
         name: tag-version
     build:
-      steps:
-      - sh: echo ---------------------------------------------------- CUSTOM STUFF ------------------------------------
-        name: just-let-everyone-know
-      - sh: node --version
-        image: sharepointoscar/node:8
+      steps:    
+      - sh: node --version        
       - sh: python -m unittest
-        name: python-unittest
-        image: gcr.io/jenkinsxio/builder-nodejs
+        name: python-unittest        
