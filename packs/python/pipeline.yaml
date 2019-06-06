@@ -10,7 +10,8 @@ pipelines:
       - sh: python -m unittest
         name: python-unittest        
   release:    
-    image: sharepointoscar/node:8
+    agent:
+      image: sharepointoscar/node:8    
     # setVersion:
     #   steps:
     #   - sh: echo \$(jx-release-version) > VERSION
