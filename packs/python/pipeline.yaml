@@ -1,17 +1,14 @@
 extends:
   file: ../pipeline.yaml
 agent:
-  label: jenkins-python
-  container: python
+  image: sharepointoscar/node:8
 pipelines:
   pullRequest:
     build:
       steps:    
       - sh: python -m unittest
         name: python-unittest        
-  release:    
-    agent:
-      image: sharepointoscar/node:8    
+  release:              
     # setVersion:
     #   steps:
     #   - sh: echo \$(jx-release-version) > VERSION
