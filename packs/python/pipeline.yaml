@@ -21,8 +21,9 @@ pipelines:
         name: tag-version
     build:
       steps:
-      - sh: echo sharepointoscar
-        name: extra step from other container
+      - sh: echo ---------------------------------------------------- CUSTOM STUFF ------------------------------------
+        name: just-let-everyone-know
+      - sh: node --version
         image: sharepointoscar/node:8
       - sh: python -m unittest
         name: python-unittest
