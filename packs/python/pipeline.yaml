@@ -6,7 +6,7 @@ pipelines:
   pullRequest:
     build:
       steps:            
-      - sh: pytest --cov-report html --cov-report xml --cov-report term --cov=.
+      - sh: pytest --cov
         name: python-unit-test    
   release:
     setVersion:
@@ -19,6 +19,8 @@ pipelines:
         name: tag-version
 
     build:
-      steps:            
-      - sh: pytest --cov-report html --cov-report xml --cov-report term --cov=. --junitxml=testresults.xml
+      steps:                  
+      - sh:  pytest --cov
         name: python-unit-test
+      - sh:  coveralls
+        name: pubish-coverage-to-coveralls
