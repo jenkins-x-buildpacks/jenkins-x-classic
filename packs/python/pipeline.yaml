@@ -1,25 +1,28 @@
 extends:
   file: ../pipeline.yaml
 agent:
-  image: sharepointoscar/node:8
+  image: denispalnitskyaurea/pythonextended
 pipelines:
   pullRequest:
     build:
-      steps:    
-      - sh: python -m unittest
-        name: python-unittest        
-  release:              
-    # setVersion:
-    #   steps:
-    #   - sh: echo \$(jx-release-version) > VERSION
-    #     name: next-version
-    #     comment: so we can retrieve the version in later steps
-    #   # TODO set the version in source?
-    #   - sh: jx step tag --version \$(cat VERSION)
-    #     name: tag-version
+      steps:      
+      - sh: pip install pytest-cov
+        name: python-test-cov-dependency
+      - sh: pytest --cov-report html --cov-report xml --cov-report term --cov=.
+        name: python-unit-test    
+  release:
+    setVersion:
+      steps:
+      - sh: echo \$(jx-release-version) > VERSION
+        name: next-version
+        comment: so we can retrieve the version in later steps
+      # TODO set the version in source?
+      - sh: jx step tag --version \$(cat VERSION)
+        name: tag-version
+
     build:
-      steps:    
-      - sh: node --version        
-        name: NodeJs step
-      # - sh: python -m unittest
-      #   name: python-unittest        
+      steps:      
+      - sh: pip install pytest-cov
+        name: python-test-cov-dependency
+      - sh: pytest --cov-report html --cov-report xml --cov-report term --cov=.
+        name: python-unit-test
