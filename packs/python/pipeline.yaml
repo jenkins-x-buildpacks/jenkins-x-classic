@@ -6,9 +6,10 @@ agent:
 pipelines:
   pullRequest:
     build:
-      steps:
+      steps:    
       - sh: python -m unittest
         name: python-unittest
+        image: gcr.io/jenkinsxio/builder-nodejs
   release:
     setVersion:
       steps:
@@ -20,6 +21,9 @@ pipelines:
         name: tag-version
     build:
       steps:
+      - sh: echo sharepointoscar
+        name: extra step from other container
+        image: sharepointoscar/node:8
       - sh: python -m unittest
         name: python-unittest
         image: gcr.io/jenkinsxio/builder-nodejs
