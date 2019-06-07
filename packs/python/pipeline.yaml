@@ -7,7 +7,27 @@ pipelines:
     build:
       steps:            
       - sh: pytest --cov
-        name: python-unit-test    
+        name: python-unit-test
+    postBuild:
+      steps:
+      - sh: export NEXUS_CENTRAL_USERNAME=\$(jx step credential -s central_nexus -k username -n jx)
+      - sh: export NEXUS_CENTRAL_PASSWORD=\$(jx step credential -s central_nexus -k password -n jx)
+      - sh: export NEXUS_CENTRAL_ENDPOINT=\$(jx step credential -s central_nexus -k endpoint -n jx)
+      - sh: cd .. && export NEXUS_CENTRAL_ENDPOINT=\$(jx step credential -s trilogy-group-\$(basename \$OLDPWD) -n jx -k repo)
+      - sh: echo ******************DEBUG******************
+      - sh: echo \$(jx step credential -s central_nexus -k username -n jx)
+      - sh: echo \$(jx step credential -s central_nexus -k password -n jx)
+      - sh: echo \$(jx step credential -s central_nexus -k endpoint -n jx)
+      - sh: cd .. && echo KEYSTORE trilogy-group-\$(basename \$OLDPWD)
+      - sh: echo ******************DEBUG******************
+        name: expose nexus secrets
+      - sh: cd .. && tar --exclude=\$(basename \$OLDPWD)/.git -cvzf \$(basename \$OLDPWD)-\$BRANCH_NAME-\$BUILD_NUMBER.tar.gz \$(basename \$OLDPWD) && cd \$(basename \$OLDPWD)
+        name: package-artifacts
+        comment: Packaging artifacts as a tar file
+      - sh: cd .. && curl -v -u \$NEXUS_CENTRAL_USERNAME:\$NEXUS_CENTRAL_PASSWORD --upload-file \$(basename \$OLDPWD)-\$BRANCH_NAME-\$BUILD_NUMBER.tar.gz \$NEXUS_CENTRAL_ENDPOINT/repository/\$(basename \$OLDPWD)/\$(basename \$OLDPWD)-\$BRANCH_NAME-\$BUILD_NUMBER.tar.gz
+        name: package-artifacts
+        comment: Need to remove hard coded creds and read from ENV ?
+
   release:
     setVersion:
       steps:
