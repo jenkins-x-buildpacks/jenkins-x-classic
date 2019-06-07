@@ -20,9 +20,9 @@ pipelines:
 
     build:
       steps:                  
-      - sh:  pytest --cov
+      - sh:  pytest --cov=tests
         name: python-unit-test
       - sh:  coveralls
         name: pubish-coverage-to-coveralls
-      - sh: jx step stash -c tests -p "target/test-reports/*" --verbose
+      - sh: jx step stash -c tests -p "target/test-reports/*"
         name: stash-test-results
