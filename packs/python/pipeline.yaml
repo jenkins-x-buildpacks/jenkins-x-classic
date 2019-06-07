@@ -24,3 +24,5 @@ pipelines:
         name: python-unit-test
       - sh:  coveralls
         name: pubish-coverage-to-coveralls
+      - sh: jx step stash -c tests -p "target/test-reports/*"
+        name: stash-test-results
