@@ -10,10 +10,10 @@ pipelines:
         name: python-unit-test
     postBuild:
       steps:
-      - sh: export NEXUS_CENTRAL_USERNAME=\$(jx step credential -s central_nexus -k username -n jx)
-      - sh: export NEXUS_CENTRAL_PASSWORD=\$(jx step credential -s central_nexus -k password -n jx)
-      - sh: export NEXUS_CENTRAL_ENDPOINT=\$(jx step credential -s central_nexus -k endpoint -n jx)
-      - sh: cd .. && export NEXUS_CENTRAL_ENDPOINT=\$(jx step credential -s \$REPO_OWNER-\$REPO_NAME -n jx -k repo)
+      - sh: export NEXUS_CENTRAL_USERNAME=\$(jx step credential -s central_nexus -k username)
+      - sh: export NEXUS_CENTRAL_PASSWORD=\$(jx step credential -s central_nexus -k password)
+      - sh: export NEXUS_CENTRAL_ENDPOINT=\$(jx step credential -s central_nexus -k endpoint)
+      - sh: cd .. && export NEXUS_CENTRAL_ENDPOINT=\$(jx step credential -s \$REPO_OWNER-\$REPO_NAME -k repo)
         name: expose nexus secrets
       - sh: cd .. && tar --exclude=\$REPO_OWNER-\$REPO_NAME/.git -cvzf \$REPO_OWNER-\$REPO_NAME-\$BRANCH_NAME-\$BUILD_NUMBER.tar.gz \$REPO_OWNER-\$REPO_NAME && cd \$REPO_OWNER-\$REPO_NAME
         name: package-artifacts
