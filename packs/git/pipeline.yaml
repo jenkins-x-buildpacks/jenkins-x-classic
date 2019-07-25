@@ -1,0 +1,11 @@
+extends:
+  file: ../pipeline.yaml
+agent:
+  label: jenkins-go
+  container: go
+pipelines:
+  release:
+    setVersion:
+      steps:
+      - sh: jx step next-version --use-git-tag-only --tag
+        name: tag-version
