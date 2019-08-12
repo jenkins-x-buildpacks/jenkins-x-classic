@@ -9,3 +9,5 @@ pipelines:
       steps:
       - sh: jx step next-version --use-git-tag-only --tag
         name: tag-version
+      - sh: jx step changelog --verbose --version ${VERSION} --rev ${PULL_BASE_SHA}
+        name: release-version
