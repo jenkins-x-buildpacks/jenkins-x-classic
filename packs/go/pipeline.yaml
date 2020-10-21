@@ -1,7 +1,7 @@
 agent:
   label: jenkins-go
   container: go
-  dir: /home/jenkins/go/src/REPLACE_ME_GIT_PROVIDER/REPLACE_ME_ORG/REPLACE_ME_APP_NAME
+  dir: /home/jenkins/agent/go/src/REPLACE_ME_GIT_PROVIDER/REPLACE_ME_ORG/REPLACE_ME_APP_NAME
 pipelines:
   pullRequest:
     setup:
